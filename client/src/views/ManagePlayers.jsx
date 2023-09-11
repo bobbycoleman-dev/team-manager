@@ -31,7 +31,16 @@ const ManagePlayers = () => {
 			.catch((err) => {
 				const errorResponse = err.response.data.errors;
 
-				setErrors({ nameError: errorResponse.name.message, positionError: errorResponse.position.message });
+				if (errorResponse.position && errorResponse.name) {
+					setErrors({
+						nameError: errorResponse.name.message,
+						positionError: errorResponse.position.message
+					});
+				} else if (errorResponse.name && !errorResponse.position) {
+					setErrors({ nameError: errorResponse.name.message });
+				} else if (!errorResponse.name && errorResponse.position) {
+					setErrors({ positionError: errorResponse.position.message });
+				}
 			});
 	};
 
